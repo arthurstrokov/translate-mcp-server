@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: translate-mcp-server
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: translategemma:latest
+        options:
+          temperature: 0.0
+
+logging:
+  level:
+    root: WARN
+    io.modelcontextprotocol:
+      client: DEBUG
+      spec: DEBUG
+    com.gmail.arthurstrokov: DEBUG
