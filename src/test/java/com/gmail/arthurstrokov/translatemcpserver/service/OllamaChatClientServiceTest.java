@@ -54,10 +54,8 @@ class OllamaChatClientServiceTest {
         when(requestSpec.user(anyString())).thenReturn(requestSpec);
         when(requestSpec.call()).thenReturn(responseSpec);
         when(responseSpec.content()).thenReturn(expectedTranslation);
-
         // when
         String result = ollamaChatClientService.ask(input);
-
         // then
         assertThat(result).isEqualTo(expectedTranslation);
     }
@@ -90,15 +88,12 @@ class OllamaChatClientServiceTest {
         // given
         String input = "Hello";
         String expectedTranslation = "Привет";
-
         when(chatClient.prompt()).thenReturn(requestSpec);
         when(requestSpec.user(anyString())).thenReturn(requestSpec);
         when(requestSpec.call()).thenReturn(responseSpec);
         when(responseSpec.content()).thenReturn(expectedTranslation);
-
         // when
         ollamaChatClientService.ask(input);
-
         // then
         verify(requestSpec).user(promptCaptor.capture());
         assertThat(promptCaptor.getValue()).contains(input);
@@ -109,11 +104,9 @@ class OllamaChatClientServiceTest {
     void translateShouldThrowExceptionWhenChatClientFails() {
         // given
         String input = "Hello";
-
         when(chatClient.prompt()).thenReturn(requestSpec);
         when(requestSpec.user(anyString())).thenReturn(requestSpec);
         when(requestSpec.call()).thenThrow(new RuntimeException("Connection error"));
-
         // when & then
         assertThatThrownBy(() -> ollamaChatClientService.ask(input))
                 .isInstanceOf(RuntimeException.class)

@@ -17,7 +17,6 @@ class TranslationIntegrationTest {
     void testTranslation() {
         String input = "Hello";
         String result = ollamaChatClientService.ask(input);
-
         assertThat(result).isNotBlank();
         // Check if the result contains Cyrillic characters, which indicates it was translated to Russian
         assertThat(result.chars().anyMatch(c ->

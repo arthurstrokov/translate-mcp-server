@@ -34,10 +34,8 @@ class TranslateToolTest {
     void translateShouldDelegateToService(String input, String expectedTranslation) {
         // given
         when(ollamaChatClientService.ask(input)).thenReturn(expectedTranslation);
-
         // when
         String result = translateTool.translate(input);
-
         // then
         assertThat(result).isEqualTo(expectedTranslation);
         verify(ollamaChatClientService).ask(input);
