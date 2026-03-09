@@ -57,10 +57,13 @@ Note: The application requires `--enable-native-access=ALL-UNNAMED`, which is pr
 ### Run a specific test class
 
 ```bash
-./gradlew test --tests "TranslateServiceTest"
+./gradlew test --tests "OllamaChatClientServiceTest"
 ```
 
-*Note: Integration tests require a running Ollama instance with the `translategemma:latest` model.*
+### Test Types
+
+- **Unit Tests** (`OllamaChatClientServiceTest`, `TranslateToolTest`): Use Mockito for mocking dependencies. Run without external services.
+- **Integration Tests** (`TranslationIntegrationTest`): Require a running Ollama instance with the `translategemma:latest` model.
 
 ## Configuration
 
@@ -70,6 +73,7 @@ The application is configured via `src/main/resources/application.yml`. Key conf
 - **Model**: `translategemma:latest` (configured via `spring.ai.ollama.chat.model`)
 - **Server Port**: `8080`
 - **Logging**: Detailed logs for `com.gmail.arthurstrokov` and MCP protocols are enabled at `DEBUG` level.
+- **Prompt Template**: Translation prompt configured via `app.prompt.translate` property.
 
 ### Environment Variables
 
@@ -81,11 +85,10 @@ variables if needed:
 ## Project Structure
 
 - `src/main/java/.../configuration/`: Spring configuration for ChatClient and MCP tools.
-- `src/main/java/.../service/`: Core translation logic.
-- `src/main/java/.../template/`: System prompts for translation.
-- `src/main/java/.../tool/`: MCP tool definitions using `@Tool`.
-- `src/main/resources/`: Configuration files.
-- `src/test/java/.../`: Unit and integration tests.
+- `src/main/java/.../service/`: Core translation logic (`OllamaChatClientService` implements `ChatClientService`).
+- `src/main/java/.../tool/`: MCP tool definitions using `@Tool` annotation.
+- `src/main/resources/`: Configuration files including prompt templates.
+- `src/test/java/.../`: Unit tests (Mockito-based) and integration tests (`@SpringBootTest`).
 
 ## MCP Tools
 

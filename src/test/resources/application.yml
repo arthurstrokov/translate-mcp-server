@@ -22,7 +22,3 @@ app:
 logging:
   level:
     root: WARN
-    io.modelcontextprotocol:
-      client: DEBUG
-      spec: DEBUG
-    com.gmail.arthurstrokov: DEBUG

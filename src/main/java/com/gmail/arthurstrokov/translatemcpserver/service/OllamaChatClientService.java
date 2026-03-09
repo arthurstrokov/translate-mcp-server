@@ -2,19 +2,21 @@ package com.gmail.arthurstrokov.translatemcpserver.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import static com.gmail.arthurstrokov.translatemcpserver.template.TranslatePromptTemplate.TRANSLATE;
 
 @Service
 @RequiredArgsConstructor
-public class TranslateService {
+public class OllamaChatClientService implements ChatClientService {
+
+    @Value("${app.prompt.translate}")
+    private String template;
 
     private final ChatClient chatClient;
 
-    public String translate(String text) {
+    public String ask(String text) {
         return chatClient.prompt()
-                .user(TRANSLATE.formatted(text))
+                .user(String.format(template, text))
                 .call()
                 .content();
     }

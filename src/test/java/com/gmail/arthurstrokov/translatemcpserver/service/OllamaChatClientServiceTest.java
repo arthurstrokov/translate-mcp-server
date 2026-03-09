@@ -12,6 +12,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.stream.Stream;
 
@@ -22,7 +23,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class TranslateServiceTest {
+class OllamaChatClientServiceTest {
 
     @Mock
     private ChatClient chatClient;
@@ -36,11 +37,12 @@ class TranslateServiceTest {
     @Captor
     private ArgumentCaptor<String> promptCaptor;
 
-    private TranslateService translateService;
+    private OllamaChatClientService ollamaChatClientService;
 
     @BeforeEach
     void setUp() {
-        translateService = new TranslateService(chatClient);
+        ollamaChatClientService = new OllamaChatClientService(chatClient);
+        ReflectionTestUtils.setField(ollamaChatClientService, "template", "Translate: %s");
     }
 
     @ParameterizedTest(name = "{0}")
@@ -54,7 +56,7 @@ class TranslateServiceTest {
         when(responseSpec.content()).thenReturn(expectedTranslation);
 
         // when
-        String result = translateService.translate(input);
+        String result = ollamaChatClientService.ask(input);
 
         // then
         assertThat(result).isEqualTo(expectedTranslation);
@@ -95,7 +97,7 @@ class TranslateServiceTest {
         when(responseSpec.content()).thenReturn(expectedTranslation);
 
         // when
-        translateService.translate(input);
+        ollamaChatClientService.ask(input);
 
         // then
         verify(requestSpec).user(promptCaptor.capture());
@@ -113,7 +115,7 @@ class TranslateServiceTest {
         when(requestSpec.call()).thenThrow(new RuntimeException("Connection error"));
 
         // when & then
-        assertThatThrownBy(() -> translateService.translate(input))
+        assertThatThrownBy(() -> ollamaChatClientService.ask(input))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Connection error");
     }

@@ -1,9 +1,7 @@
 package com.gmail.arthurstrokov.translatemcpserver.tool;
 
-import com.gmail.arthurstrokov.translatemcpserver.service.TranslateService;
+import com.gmail.arthurstrokov.translatemcpserver.service.OllamaChatClientService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -18,13 +16,13 @@ import static org.mockito.Mockito.when;
 class TranslateToolTest {
 
     @Mock
-    private TranslateService translateService;
+    private OllamaChatClientService ollamaChatClientService;
 
     private TranslateTool translateTool;
 
     @BeforeEach
     void setUp() {
-        translateTool = new TranslateTool(translateService);
+        translateTool = new TranslateTool(ollamaChatClientService);
     }
 
     @ParameterizedTest(name = "Should delegate {0} to service")
@@ -35,13 +33,13 @@ class TranslateToolTest {
     })
     void translateShouldDelegateToService(String input, String expectedTranslation) {
         // given
-        when(translateService.translate(input)).thenReturn(expectedTranslation);
+        when(ollamaChatClientService.ask(input)).thenReturn(expectedTranslation);
 
         // when
         String result = translateTool.translate(input);
 
         // then
         assertThat(result).isEqualTo(expectedTranslation);
-        verify(translateService).translate(input);
+        verify(ollamaChatClientService).ask(input);
     }
 }
