@@ -11,8 +11,7 @@ spring:
 
 logging:
   level:
-    root: WARN
     io.modelcontextprotocol:
-      client: DEBUG
-      spec: DEBUG
-    com.gmail.arthurstrokov: DEBUG
+      spec: debug
+      client: debug
+    com.gmail.arthurstrokov: debug

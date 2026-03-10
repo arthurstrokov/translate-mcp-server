@@ -99,4 +99,4 @@ The server exposes the following tools:
 
 ## License
 
-TODO: Add license information.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
