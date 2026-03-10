@@ -1,5 +1,6 @@
 package com.gmail.arthurstrokov.translatemcpserver.service;
 
+import com.gmail.arthurstrokov.translatemcpserver.configuration.PromptProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,12 +13,12 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -34,6 +35,9 @@ class OllamaChatClientServiceTest {
     @Mock
     private ChatClient.CallResponseSpec responseSpec;
 
+    @Mock
+    private PromptProperties promptProperties;
+
     @Captor
     private ArgumentCaptor<String> promptCaptor;
 
@@ -41,8 +45,9 @@ class OllamaChatClientServiceTest {
 
     @BeforeEach
     void setUp() {
-        ollamaChatClientService = new OllamaChatClientService(chatClient);
-        ReflectionTestUtils.setField(ollamaChatClientService, "template", "Translate: %s");
+        ollamaChatClientService = new OllamaChatClientService(chatClient, promptProperties);
+        when(promptProperties.getTranslatePrompt(any()))
+                .thenAnswer(invocation -> "Translate: " + invocation.getArgument(0));
     }
 
     @ParameterizedTest(name = "{0}")
