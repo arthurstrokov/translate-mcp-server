@@ -3,7 +3,7 @@ spring:
     name: translate-mcp-server
   ai:
     ollama:
-      base-url: http://localhost:11434
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
       chat:
         model: translategemma:latest
         options:
